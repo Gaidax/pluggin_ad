@@ -70,20 +70,19 @@ function save_file_meta_data($id) {
 
 
         //if(in_array($uploaded_type, $supported_types))
-                $file_arr = $_FILES['wp_attached_file'];
+/*                $file_arr = $_FILES['wp_attached_file'];
 
         $upload = wp_upload_bits($file_arr['name'], null, file_get_contents($file_arr['tmp_name']));
-                                                                                                             //WORKS, ADDS ONE FILE
+                                                                                                             //WORKS, ADDS ONE FILE s
         if(isset($upload['error']) && $upload['error'] != 0) {
                     wp_die('There was an error uploading your files. The error is: ' . $upload['error']);
                 }
                     add_post_meta($id, 'wp_attached_file', $upload);
                     update_post_meta($id, 'wp_attached_file', $upload);
+*/
 
 
-
-/*        $files_to_upload = array();
-
+        $files_to_upload = array();
         foreach ($file_arr as $key => $value) {
                 if($file_arr['name'][$key]) {
                     $file = array( 
@@ -107,7 +106,7 @@ function save_file_meta_data($id) {
                 }
                     add_post_meta($id, 'wp_attached_file', $upload);
                     update_post_meta($id, 'wp_attached_file', $upload);  
-                    */
+                    
 
             }
 
