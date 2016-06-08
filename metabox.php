@@ -36,7 +36,7 @@ function wp_attached_file() {
     $html .= 'Upload your folder here.';
     $html .= '</p>';
     //$html .= '<input type="file" id="wp_attached_file" name="wp_attached_file" value="" size="25"/>';
-    $html .= '<input type="file" id="wp_attached_file" name="wp_attached_file" size="25" webkitdirectory directory multiple/>';
+    $html .= '<input type="file" id="wp_attached_file" name="wp_attached_file[]" size="25"  multiple/>';
     echo $html;
 }
 
@@ -61,7 +61,35 @@ function save_file_meta_data($id) {
             return $id;
         }
     }
-    if(!empty($_FILES['wp_attached_file']['name'])) {
+    //$files = $_FILES['name'];
+
+    $file_arr = $_FILES;
+    if(!empty($file_arr)) {
+        //if(in_array($uploaded_type, $supported_types))
+        foreach ($file_arr as $file) {
+        	for($i=0; $i < count($file['name']); $i++) {
+        	
+        	$upload = wp_upload_bits($file['name'][$i], null, file_get_contents($file['tmp_name'][$i]));
+        	
+        	}
+     		
+        }
+
+
+
+
+    
+
+                                                                                                             //WORKS, ADDS ONE FILE
+        if(isset($upload['error']) && $upload['error'] != 0) {
+                    wp_die('There was an error uploading your files. The error is: ' . $upload['error']);
+                }
+                    add_post_meta($id, 'wp_attached_file', $upload);
+                    update_post_meta($id, 'wp_attached_file', $upload);
+                }
+
+
+/*    if(!empty($files)) {
 
         $supported_types = array('application/javascript');     
 
@@ -69,71 +97,26 @@ function save_file_meta_data($id) {
         $uploaded_type = $arr_file_type['type'];
 
 
-        //if(in_array($uploaded_type, $supported_types))
-/*                $file_arr = $_FILES['wp_attached_file'];
+        if(is_array($files)) {
 
-        $upload = wp_upload_bits($file_arr['name'], null, file_get_contents($file_arr['tmp_name']));
-                                                                                                             //WORKS, ADDS ONE FILE s
-        if(isset($upload['error']) && $upload['error'] != 0) {
-                    wp_die('There was an error uploading your files. The error is: ' . $upload['error']);
-                }
-                    add_post_meta($id, 'wp_attached_file', $upload);
-                    update_post_meta($id, 'wp_attached_file', $upload);
-*/
+        for($i=0; $i<count($files); $i++) {
 
-
-        $files_to_upload = array();
-        foreach ($file_arr as $key => $value) {
-                if($file_arr['name'][$key]) {
-                    $file = array( 
-                        'name' => $file_arr['name'][$key],
-                        'type' => $file_arr['type'][$key], 
-                        'tmp_name' => $file_arr['tmp_name'][$key], 
-                        'error' => $file_arr['error'][$key],
-                        'size' => $file_arr['size'][$key]
-                    ); 
-
-                  array_push($files_to_upload, $file);
-                }
+        	$upload[] = wp_upload_bits($files[$i], null, file_get_contents($_FILES['tmp_name'][$i]));
         }
-        //$uploads = array();
-
-
-                $upload = wp_upload_bits($file['name'], null, file_get_contents($file['tmp_name']));
-
-                if(isset($upload['error']) && $upload['error'] != 0) {
-                    wp_die('There was an error uploading your files. The error is: ' . $upload['error']);
-                }
-                    add_post_meta($id, 'wp_attached_file', $upload);
-                    update_post_meta($id, 'wp_attached_file', $upload);  
-                    
-
-            }
-
-            }
+    } else {
+    	$upload[] = wp_upload_bits($files, null, file_get_contents($_FILES['tmp_name']));
+    }
         
 
+        //add_post_meta($id, 'wp_attached_file', $upload[]);
+       	//update_post_meta($id, 'wp_attached_file', $upload[]);
+    }*/
+}
 
-/*       $up_scripts = $_FILES['wp_attached_file'];
-        $uploads = array();
-        foreach ($up_scripts['name'] as $key => $script) {
 
-            $upload = wp_upload_bits($script, null, file_get_contents($script['tmp_name']));
-            array_push($uploads, $upload);
-        }
-        foreach ($uploads as $key => $upload) {
-         if(isset($upload['error']) && $upload['error'] != 0) {
-                wp_die('There was an error uploading your files. The error is: ' . $upload['error']);
-            } else {
-                
-                 add_post_meta($key, 'wp_attached_file', $upload);
-                 update_post_meta($key, 'wp_attached_file', $upload); 
-                }
-            }*/
 
-        //} else {
-           // wp_die("The file type that you've uploaded is not a script.");
-        //}          
+
+			       
 
 function update_edit_form() {
     echo ' enctype="multipart/form-data"';

@@ -48,7 +48,8 @@ get_header();
             <div id="main" role="main">
                 <?php deliver_get_template( 'content-single', $post_layout ); 
 				$script_meta = get_post_meta(get_the_ID(), 'wp_attached_file', false);
-				echo "<p id = 'script_place2'>". $script_meta[1]['file'] ."</p>";
+                echo "<p id = 'script_place2'>". $script_meta['file'] ."</p>";
+                echo "<br>";
 				echo "<p id = 'script_place3'>d</p>";			
 				?>
             </div>
