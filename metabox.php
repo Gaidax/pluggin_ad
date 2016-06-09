@@ -11,13 +11,6 @@ add_action('save_post', 'save_file_meta_data');
 add_action('post_edit_form_tag', 'update_edit_form');
 
 function upload_metabox() {
-/*    add_meta_box(
-        'wp_attached_file',
-        'Attached File',
-        'wp_attached_file',
-        'post',
-        'side'
-    );*/
 
     add_meta_box(
         'wp_attached_file',
@@ -36,7 +29,7 @@ function wp_attached_file() {
     $html .= 'Upload your folder here.';
     $html .= '</p>';
     //$html .= '<input type="file" id="wp_attached_file" name="wp_attached_file" value="" size="25"/>';
-    $html .= '<input type="file" id="wp_attached_file" name="wp_attached_file[]" size="25"  multiple/>';
+    $html .= '<input type="file" id="wp_attached_file" name="wp_attached_file[]" size="25" webkitdirectory directory  multiple/>';
     echo $html;
 }
 
@@ -64,53 +57,29 @@ function save_file_meta_data($id) {
     //$files = $_FILES['name'];
 
     $file_arr = $_FILES;
+    $upload = array();
     if(!empty($file_arr)) {
         //if(in_array($uploaded_type, $supported_types))
         foreach ($file_arr as $file) {
         	for($i=0; $i < count($file['name']); $i++) {
         	
-        	$upload = wp_upload_bits($file['name'][$i], null, file_get_contents($file['tmp_name'][$i]));
+        	$upload[] = wp_upload_bits($file['name'][$i], null, file_get_contents($file['tmp_name'][$i]));
         	
         	}
      		
         }
-
-
-
-
-    
-
-                                                                                                             //WORKS, ADDS ONE FILE
-        if(isset($upload['error']) && $upload['error'] != 0) {
-                    wp_die('There was an error uploading your files. The error is: ' . $upload['error']);
+        $j = 1;
+         foreach ($upload as $uploaded) {
+         	        if(isset($uploaded['error']) && $uploaded['error'] != 0) {
+                    wp_die('There was an error uploading your files. The error is: ' . $uploaded['error']); 
                 }
-                    add_post_meta($id, 'wp_attached_file', $upload);
-                    update_post_meta($id, 'wp_attached_file', $upload);
+                    add_post_meta($id, 'wp_attached_file'.$j, $uploaded);      //YO DAWG ADD ANY $KEY YOU WANT, RETRIEVE IT ON FRONTEND
+                    update_post_meta($id, 'wp_attached_file'.$j, $uploaded);
+                    $j++;
                 }
+                add_post_meta($id, 'files_num', $j);
+		 }                                                                                              
 
-
-/*    if(!empty($files)) {
-
-        $supported_types = array('application/javascript');     
-
-        $arr_file_type = wp_check_filetype(basename($_FILES['wp_attached_file']['name']));
-        $uploaded_type = $arr_file_type['type'];
-
-
-        if(is_array($files)) {
-
-        for($i=0; $i<count($files); $i++) {
-
-        	$upload[] = wp_upload_bits($files[$i], null, file_get_contents($_FILES['tmp_name'][$i]));
-        }
-    } else {
-    	$upload[] = wp_upload_bits($files, null, file_get_contents($_FILES['tmp_name']));
-    }
-        
-
-        //add_post_meta($id, 'wp_attached_file', $upload[]);
-       	//update_post_meta($id, 'wp_attached_file', $upload[]);
-    }*/
 }
 
 

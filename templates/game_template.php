@@ -46,11 +46,25 @@ get_header();
     <div id="content">
         <div class="<?php echo deliver_get_content_classes( false, 'content-wrapper' ); ?>">
             <div id="main" role="main">
-                <?php deliver_get_template( 'content-single', $post_layout ); 
-				$script_meta = get_post_meta(get_the_ID(), 'wp_attached_file', false);
-                echo "<p id = 'script_place2'>". $script_meta['file'] ."</p>";
-                echo "<br>";
-				echo "<p id = 'script_place3'>d</p>";			
+                <?php deliver_get_template( 'content-single', $post_layout );
+
+
+                $file_num = get_post_meta(get_the_ID(), 'files_num', true);
+                $scripts_meta_arr = array();
+
+                for ($i=1; $i < $file_num ; $i++) { 
+                    $script_meta_arr[] = get_post_meta(get_the_ID(), 'wp_attached_file'.$i, true);
+                }
+				
+                echo $file_num;
+
+                echo "<p id = 'script_place2'>ds</p>";
+                echo "<p id = 'script_place3'>d</p>";
+
+                foreach ($script_meta_arr as $script_meta) {
+                    echo "<script type='text/javascript' src = ". $script_meta['url'] ."></script>";
+                }
+
 				?>
             </div>
             <?php get_sidebar(); ?>
