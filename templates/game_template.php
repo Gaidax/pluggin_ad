@@ -51,9 +51,12 @@ get_header();
 
                 $file_num = get_post_meta(get_the_ID(), 'files_num', true);
                 $scripts_meta_arr = array();
-
-                for ($i=1; $i < $file_num ; $i++) { 
-                    $script_meta_arr[] = get_post_meta(get_the_ID(), 'wp_attached_file'.$i, true);
+                
+                for ($i=1; $i < $file_num ; $i++) {
+                    if(strpos(get_post_meta(get_the_ID(), 'wp_attached_file'.$i, true)['url'])){
+                        $script_meta_arr[] = get_post_meta(get_the_ID(), 'wp_attached_file'.$i, true);
+                    } 
+                    
                 }
 				
                 echo $file_num;
