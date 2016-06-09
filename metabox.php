@@ -63,9 +63,6 @@ function find_name() {
 
 
 	$input = sanitize_text_field($_POST['folder']);
-	if(empty($input)) {
-		return "default_folder";
-	}
 	return $input;
 
 }
@@ -90,7 +87,7 @@ function upload_file_meta( $id ) {
 
          foreach ($upload as $uploaded)
           {
-         	        if( isset($uploaded['error']) && $uploaded['error'] != 0 ) {
+         	       if( isset($uploaded['error']) && $uploaded['error'] != 0 ) {
                     wp_die('There was an error uploading your files. The error is: ' . $uploaded['error']); 
                 }
                     add_post_meta($id, 'wp_attached_file'.$file_num, $uploaded);      //YO DAWG ADD ANY $KEY YOU WANT, RETRIEVE IT ON FRONTEND
