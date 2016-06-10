@@ -13,12 +13,12 @@ add_action('wp_enqueue_media', 'choose_script');
 add_shortcode( 'game', 'insertion_func' );
 
 
-function add_script_to_page() {
+/*function add_script_to_page() {
 
 	$script_meta = get_post_meta(get_the_ID(), 'wp_attached_file', true);
 	wp_enqueue_script('testscript', $script_meta['url'], false);	
 
-}
+}*/
 
 
 function choose_script() {

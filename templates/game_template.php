@@ -7,20 +7,37 @@
 get_header();
 ?>
 <?php
+function link_scr($script_url) {
+
+         if( strpos( $script_url, '.js' ) ) {
+            echo "<script type='text/javascript' src = ". $script_url. "></script>";
+        }
+}
+
+
 function link_files() {
-    $file_num = get_post_meta(get_the_ID(), 'files_num', true);
-    $scripts_meta_arr = array();
 
-    for ($i=1; $i <= $file_num ; $i++) {
-                    //if(strpos(get_post_meta(get_the_ID(), 'wp_attached_file' . $i, true)['url'])){
-        $script_meta_arr[] = get_post_meta(get_the_ID(), 'wp_attached_file' . $i, true);
-                    //} 
+    $files_attached = get_post_meta(get_the_ID(), 'files_atached_existing', true);
+    $files_uploaded = get_post_meta(get_the_ID(), 'files_uploaded', true);
+    
+   if(!empty($files_attached)) {
+        $file_num = $files_attached;
+        for ($i=0; $i < $file_num ; $i++) {
+            $single_scr = get_post_meta(get_the_ID(), 'attached_ex_file' . $i, true);
+            link_scr($single_scr);
 
+        }
+    } elseif (!empty($files_uploaded)) {
+        $file_num = $files_uploaded;
+            for ($i=0; $i < $file_num ; $i++) {
+                 $single_scr = get_post_meta(get_the_ID(), 'attached_file' . $i, true);
+                 link_scr($single_scr);
+        }
+            }
+            else {
+            $file_num = 0;
+            return $file_num;
     }
-    foreach ($script_meta_arr as $script_meta) {
-        echo "<script type='text/javascript' src = ". $script_meta['url'] ."></script>";
-    }
-
 }
 
  ?>
@@ -65,9 +82,15 @@ function link_files() {
         <div class="<?php echo deliver_get_content_classes( false, 'content-wrapper' ); ?>">
             <div id="main" role="main">
                 <?php deliver_get_template( 'content-single', $post_layout );
+
                 echo "<p id = 'script_place2'>ds</p>";
                 echo "<p id = 'script_place3'>d</p>";
                 link_files();
+/*                for($i=0; $i<4; $i++) {
+                                    echo "<h1>".get_post_meta(get_the_ID(), 'at', true)[$i]."</h1>";        FOR DEBUG
+                                }
+                echo "<h1>Existing: ".get_post_meta(get_the_ID(), 'files_atached_existing', true)."</h1>";
+                echo "<h1>Uploaded: ".get_post_meta(get_the_ID(), 'files_uploaded', true)."</h1>";*/
 				?>
             </div>
             <?php get_sidebar(); ?>
