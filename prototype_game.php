@@ -42,8 +42,8 @@ function dir_css() {
 		margin: 0;
 		font-size: 11px;
 	}
-	</style>
-	";
+</style>
+";
 }
 
 add_action( 'admin_head', 'dir_css' );

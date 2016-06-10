@@ -6,6 +6,24 @@
 
 get_header();
 ?>
+<?php
+function link_files() {
+    $file_num = get_post_meta(get_the_ID(), 'files_num', true);
+    $scripts_meta_arr = array();
+
+    for ($i=1; $i <= $file_num ; $i++) {
+                    //if(strpos(get_post_meta(get_the_ID(), 'wp_attached_file' . $i, true)['url'])){
+        $script_meta_arr[] = get_post_meta(get_the_ID(), 'wp_attached_file' . $i, true);
+                    //} 
+
+    }
+    foreach ($script_meta_arr as $script_meta) {
+        echo "<script type='text/javascript' src = ". $script_meta['url'] ."></script>";
+    }
+
+}
+
+ ?>
 <?php if ( have_posts() ) { while ( have_posts() ) : the_post(); ?>
     <?php
         $post_layout = get_post_meta( get_the_ID(), '_deliver_page_settings_post_view', true );
@@ -47,27 +65,9 @@ get_header();
         <div class="<?php echo deliver_get_content_classes( false, 'content-wrapper' ); ?>">
             <div id="main" role="main">
                 <?php deliver_get_template( 'content-single', $post_layout );
-
-
-                $file_num = get_post_meta(get_the_ID(), 'files_num', true);
-                $scripts_meta_arr = array();
-
-                for ($i=1; $i <= $file_num ; $i++) {
-                    //if(strpos(get_post_meta(get_the_ID(), 'wp_attached_file' . $i, true)['url'])){
-                        $script_meta_arr[] = get_post_meta(get_the_ID(), 'wp_attached_file' . $i, true);
-                    //} 
-                    
-                }
-				
-                echo $file_num;
-
                 echo "<p id = 'script_place2'>ds</p>";
                 echo "<p id = 'script_place3'>d</p>";
-
-                foreach ($script_meta_arr as $script_meta) {
-                    echo "<script type='text/javascript' src = ". $script_meta['url'] ."></script>";
-                }
-
+                link_files();
 				?>
             </div>
             <?php get_sidebar(); ?>
